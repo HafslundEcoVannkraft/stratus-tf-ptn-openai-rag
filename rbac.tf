@@ -31,9 +31,9 @@ resource "azurerm_role_assignment" "openai_search_service_mi_contributor" {
 
 
 # give role
-# Storage Blob Data Reader
-# to both the search service MI on scope of the storage account.
-resource "azurerm_role_assignment" "storage_blob_data_reader" {
+# Storage Blob Data Contributor
+# to the search service MI on scope of the storage account.
+resource "azurerm_role_assignment" "search_service_storage_blob_data_contributor" {
   scope                = module.ai_hub_storage_account.storage_account_resource_id
   role_definition_name = "Storage Blob Data Reader"
   principal_id         = module.search_service.identity[0].principal_id
@@ -42,7 +42,7 @@ resource "azurerm_role_assignment" "storage_blob_data_reader" {
 # give role
 # Storage Blob Data Contributor
 # to the cognitive services account MI on scope of the storage account.
-resource "azurerm_role_assignment" "storage_blob_data_contributor" {
+resource "azurerm_role_assignment" "cognitive_service_storage_blob_data_contributor" {
   scope                = module.ai_hub_storage_account.storage_account_resource_id
   role_definition_name = "Storage Blob Data Contributor"
   #principal_id         = azurerm_cognitive_account.cognitive_account.system_assigned_mi_principal_id
