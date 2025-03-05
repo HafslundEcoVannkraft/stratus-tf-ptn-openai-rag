@@ -1,11 +1,13 @@
 module "ai_hub_storage_account" {
-  source = "github.com/HafslundEcoVannkraft/stratus-tf-res-storage-storageaccount?ref=v1.0.0"
+  #source = "github.com/HafslundEcoVannkraft/stratus-tf-res-storage-storageaccount?ref=v1.0.0"
+  source = "github.com/HafslundEcoVannkraft/stratus-tf-res-storage-storageaccount?ref=feat/ml/add-ip-allowlist"
 
   rg_name              = var.resource_group_name
   location             = var.location
   storage_account_name = var.storage_account_name
   pe_subnets           = []
   network_acls_bypass  = "AzureServices"
+  ip_address_allowlist = var.client_ip_addresses
 }
 
 data "azapi_resource" "blob_service" {
