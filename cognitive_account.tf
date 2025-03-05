@@ -12,6 +12,7 @@ module "cognitive_account" {
   }
   network_acls = {
     default_action = "Deny"
+    bypass        = "AzureServices"
     ip_rules       = var.client_ip_addresses
   }
   cognitive_deployments = {
