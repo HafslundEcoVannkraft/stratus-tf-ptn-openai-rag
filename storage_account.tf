@@ -1,27 +1,33 @@
-module "ai_hub_storage_account" {
-  #source = "github.com/HafslundEcoVannkraft/stratus-tf-res-storage-storageaccount?ref=v1.0.0"
-  source = "github.com/HafslundEcoVannkraft/stratus-tf-res-storage-storageaccount?ref=feat/ml/add-ip-allowlist"
+module "storage_account" {
+  source              = "Azure/avm-res-storage-storageaccount/azurerm"
+  version             = "0.5.0"
+  location            = var.location
+  name                = var.storage_account_name
+  resource_group_name = var.resource_group_name
 
-  rg_name              = var.resource_group_name
-  location             = var.location
-  storage_account_name = var.storage_account_name
-  pe_subnets           = []
-  network_acls_bypass  = "AzureServices"
-  ip_address_allowlist = var.client_ip_addresses
-}
+  allowed_copy_scope                = "AAD"
+  default_to_oauth_authentication   = true
+  public_network_access_enabled     = true
+  infrastructure_encryption_enabled = true
 
-data "azapi_resource" "blob_service" {
-  type      = "Microsoft.Storage/storageAccounts/blobServices@2023-05-01"
-  name      = "default"
-  parent_id = module.ai_hub_storage_account.storage_account_resource_id
-}
+  blob_properties = {
+    change_feed_enabled           = true
+    change_feed_retention_in_days = 30
+    versioning_enabled            = true
+    restore_policy = {
+      days = 14
+    }
+    delete_retention_policy = {
+      days = 15
+    }
+    container_delete_retention_policy = {
+      days = 30
+    }
+  }
 
-
-resource "azapi_resource" "blob_container" {
-  type      = "Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01"
-  name      = "cognitive-deployment-training-data"
-  parent_id = data.azapi_resource.blob_service.id
-  body = {
-    properties = {}
+  network_rules = {
+    default_action = "Deny"
+    ip_rules       = var.client_ip_addresses
+    bypass        = ["AzureServices"]
   }
 }
