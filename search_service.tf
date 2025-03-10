@@ -4,7 +4,6 @@ module "search_service" {
   rg_id                   = data.azapi_resource.resource_group.id
   search_service_name     = var.search_service_name
   ip_rules                = []
-  pe_subnets              = []
   location                = var.location
   network_rule_set_bypass = "AzureServices"
   public_network_access   = "Disabled"
