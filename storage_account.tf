@@ -28,6 +28,6 @@ module "storage_account" {
   network_rules = {
     default_action = "Deny"
     ip_rules       = var.client_ip_addresses
-    bypass        = ["AzureServices"]
+    bypass         = ["AzureServices"]
   }
 }
