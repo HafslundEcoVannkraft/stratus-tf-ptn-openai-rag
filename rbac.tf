@@ -43,12 +43,3 @@ resource "azurerm_role_assignment" "cognitive_service_storage_blob_data_contribu
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = module.cognitive_account.system_assigned_mi_principal_id
 }
-
-# give role
-# Search Index Data Contributor
-# to the identity doing this terraform deployment on scope of the subscription
-resource "azurerm_role_assignment" "search_service_conributor" {
-  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}"
-  role_definition_name = "Search Service Contributor"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
